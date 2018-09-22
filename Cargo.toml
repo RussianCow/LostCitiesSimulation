@@ -1,0 +1,8 @@
+[package]
+name = "lost_cities_simulation"
+version = "0.0.1"
+authors = ["Sasha Chedygov <sasha@chedygov.com>"]
+
+[dependencies]
+lazy_static = "1.1.0"
+rand = "0.5.5"

@@ -1,0 +1,1 @@
+I'm learning Rust by writing a simulator for the board game Lost Cities. This program will currently simulate a single 1v1 game where both players choose random moves every turn. Eventually, the goal (if I ever have time) is to simulate millions of games, save their state to a file, and run a machine learning algorithm on that file to create an AI for the game.

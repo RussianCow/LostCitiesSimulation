@@ -239,10 +239,7 @@ impl GameState {
                 .collect(),
             TurnState::MovingPawn => self.player_pawns[player]
                 .iter()
-                .filter(|pawn| {
-                    let position = self.pawn_positions[**pawn];
-                    position.is_some() && position != Some(8)
-                })
+                .filter(|pawn| self.can_move_pawn(**pawn))
                 .map(|pawn| Action::MoveColor(self.pawn_colors[*pawn].unwrap()))
                 .collect(),
         }
@@ -272,6 +269,19 @@ impl GameState {
         }
     }
 
+    fn can_move_pawn(&self, pawn: PawnIndex) -> bool {
+        let position = self.pawn_positions[pawn];
+        position.is_some() && position != Some(8)
+    }
+
+    fn player_can_move_any(&self, player: PlayerIndex) -> bool {
+        self.player_pawns[player]
+            .iter()
+            .filter(|pawn| self.can_move_pawn(**pawn))
+            .next()
+            .is_some()
+    }
+
     fn play_card(&mut self, player: PlayerIndex, card: Card) -> TurnState {
         if !self.can_play_card(player, card) {
             panic!("Can't play card: {}", card);
@@ -286,13 +296,7 @@ impl GameState {
         if is_expedition_empty {
             TurnState::PlayingPawn(card.color)
         } else {
-            self.move_color(player, card.color);
-            match self.turn_state {
-                // If we've hit the end of the path, stop and let the player decide which pawn to
-                // move.
-                TurnState::MovingPawn => TurnState::MovingPawn,
-                _ => TurnState::DrawingCard,
-            }
+            self.move_color(player, card.color)
         }
     }
 
@@ -363,7 +367,13 @@ impl GameState {
                     self.player_artifacts[player] += 1;
                     self.end_turn()
                 }
-                Event::Arrow => TurnState::MovingPawn,
+                Event::Arrow => {
+                    if self.player_can_move_any(player) {
+                        TurnState::MovingPawn
+                    } else {
+                        self.end_turn()
+                    }
+                }
             },
             None => self.end_turn(),
         }

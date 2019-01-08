@@ -27,7 +27,7 @@ fn main() {
             println!("    {}", action);
         }
         let action = rng.choose(&actions).unwrap().clone();
-        println!("  {}", action);
+        println!("  action: {}", action);
         println!();
         state.do_action(action);
     }

@@ -374,9 +374,14 @@ impl GameState {
 			.iter()
 			.find(|pawn| self.pawn_colors[**pawn] == Some(color))
 			.expect(&format!("No pawn at {} exists for the player.", color));
-		let new_position = match self.pawn_positions[pawn] {
+		let current_position = self.pawn_positions[pawn];
+		if current_position == Some(8) {
+			return TurnState::MovingPawn;
+		}
+		let new_position = match current_position {
 			Some(position) => position + 1,
-			// If it's None, that means we just played the pawn but haven't moved it yet.
+			// If it's None, that means we just played the pawn but haven't
+			// moved it yet.
 			None => 0,
 		};
 		self.pawn_positions[pawn] = Some(new_position);

@@ -12,6 +12,7 @@ pub enum TurnState {
 	DrawingCard,
 	PlayingPawn(Color),
 	MovingPawn,
+	GameFinished,
 }
 impl Display for TurnState {
 	fn fmt(&self, f: &mut Formatter) -> Result {
@@ -20,6 +21,7 @@ impl Display for TurnState {
 			TurnState::DrawingCard => String::from("DrawingCard"),
 			TurnState::PlayingPawn(pawn) => format!("PlayingPawn({})", pawn),
 			TurnState::MovingPawn => String::from("MovingPawn"),
+			TurnState::GameFinished => String::from("GameFinished"),
 		};
 		f.write_str(&string)
 	}
@@ -71,7 +73,6 @@ pub struct GameState {
 	pub deck: CardPile,
 	pub turn_state: TurnState,
 	pub current_player: PlayerIndex,
-	pub is_finished: bool,
 	pub winner: Option<PlayerIndex>,
 	// TODO: Implement long (3-round) games.
 }
@@ -196,18 +197,16 @@ impl GameState {
 			deck,
 			turn_state: TurnState::PlayingCard,
 			current_player: 0,
-			is_finished: false,
 			winner: None,
 		}
 	}
 
+	pub fn is_finished(&self) -> bool {
+		self.turn_state == TurnState::GameFinished
+	}
+
 	pub fn available_actions(&self) -> Vec<Action> {
-		if self.is_finished {
-			return Vec::new();
-		}
-
 		let player = self.current_player;
-
 		match self.turn_state {
 			TurnState::PlayingCard => {
 				let mut actions: Vec<Action> = Vec::new();
@@ -249,11 +248,12 @@ impl GameState {
 				.filter(|pawn| self.can_move_pawn(**pawn))
 				.map(|pawn| Action::MoveColor(self.pawn_colors[*pawn].unwrap()))
 				.collect(),
+			TurnState::GameFinished => Vec::new(),
 		}
 	}
 
 	pub fn do_action(&mut self, action: Action) {
-		if self.is_finished {
+		if self.is_finished() {
 			panic!("Cannot do_action when the game has already finished.");
 		}
 
@@ -322,9 +322,7 @@ impl GameState {
 	fn draw_from_deck(&mut self, player: PlayerIndex) -> TurnState {
 		self.player_hands[player].push(self.deck.pop().unwrap());
 		if self.deck.is_empty() {
-			self.end_game();
-			TurnState::PlayingCard // Since we don't have a "finished" turn state.
-						  // TODO: Maybe we should have one?
+			self.end_game()
 		} else {
 			self.end_turn()
 		}
@@ -436,9 +434,7 @@ impl GameState {
 		TurnState::PlayingCard
 	}
 
-	fn end_game(&mut self) {
-		self.is_finished = true;
-
+	fn end_game(&mut self) -> TurnState {
 		self.calculate_scores();
 
 		let max_score =
@@ -464,6 +460,8 @@ impl GameState {
 		} else {
 			None
 		};
+
+		TurnState::GameFinished
 	}
 
 	fn calculate_scores(&mut self) {

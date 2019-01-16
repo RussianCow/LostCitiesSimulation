@@ -56,6 +56,8 @@ fn create_events() -> Vec<Event> {
 }
 
 pub struct GameState {
+	pub num_players: u8,
+
 	// TODO: Turn some of these vectors into statically sized slices.
 	pub player_hands: Vec<CardPile>,
 	pub player_scores: Vec<Score>,
@@ -77,7 +79,7 @@ pub struct GameState {
 	// TODO: Implement long (3-round) games.
 }
 impl GameState {
-	pub fn new(num_players: i8) -> GameState {
+	pub fn new(num_players: u8) -> GameState {
 		if num_players > 4 || num_players < 2 {
 			panic!("Games can only have between 2 and 4 players.");
 		}
@@ -181,6 +183,7 @@ impl GameState {
 		];
 
 		GameState {
+			num_players,
 			player_hands,
 			player_scores,
 			player_artifacts,

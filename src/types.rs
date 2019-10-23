@@ -6,7 +6,7 @@ pub type PathPosition = u8;
 pub type Score = i16;
 pub type CardPile = Vec<Card>;
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Debug)]
 pub enum Color {
 	Yellow,
 	Green,
@@ -27,7 +27,7 @@ impl Display for Color {
 	}
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Debug)]
 pub struct Card {
 	pub color: Color,
 	pub number: i8,
@@ -43,7 +43,7 @@ impl Display for Card {
 	}
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Debug)]
 pub enum PawnType {
 	Adventurer,
 	Researcher,
@@ -58,14 +58,14 @@ impl Display for PawnType {
 	}
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Debug)]
 pub enum Event {
 	Points(Score),
 	Artifact,
 	Arrow,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Serialize, Deserialize, Debug)]
 pub enum Action {
 	PlayCard(Card),
 	DiscardCard(Card),

@@ -4,5 +4,10 @@ version = "0.0.1"
 authors = ["Sasha Chedygov <sasha@chedygov.com>"]
 
 [dependencies]
+bincode = "1.0.1"
+chrono = "0.4.6"
+clap = "2.32.0"
 lazy_static = "1.1.0"
 rand = "0.5.5"
+serde = "1.0.84"
+serde_derive = "1.0.84"

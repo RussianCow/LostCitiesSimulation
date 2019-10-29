@@ -1,4 +1,6 @@
-use types::Color;
+use lazy_static::lazy_static;
+
+use crate::types::Color;
 
 lazy_static! {
 	pub static ref COLORS: Vec<Color> = vec![

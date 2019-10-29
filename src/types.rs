@@ -1,5 +1,7 @@
 use std::fmt::{Display, Formatter, Result};
 
+use serde_derive::{Deserialize, Serialize};
+
 pub type PlayerIndex = usize;
 pub type PawnIndex = usize;
 pub type PathPosition = u8;

@@ -3,8 +3,8 @@ use std::fmt::{Display, Formatter, Result};
 use rand::prng::XorShiftRng;
 use rand::{Rng, SeedableRng};
 
-use constants::COLORS;
-use types::*;
+use crate::constants::COLORS;
+use crate::types::*;
 
 #[derive(Clone, PartialEq)]
 pub enum TurnState {

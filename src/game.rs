@@ -1,7 +1,9 @@
 use rand::Rng;
 
-use state::GameState;
-use types::{Action, CardPile, Event};
+use serde_derive::{Deserialize, Serialize};
+
+use crate::state::GameState;
+use crate::types::{Action, CardPile, Event};
 
 #[derive(PartialEq, Serialize, Deserialize, Debug)]
 pub struct FinishedGame {

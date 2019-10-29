@@ -1,16 +1,9 @@
 extern crate bincode;
 extern crate chrono;
 extern crate clap;
-#[macro_use]
 extern crate lazy_static;
 extern crate rand;
-#[macro_use]
 extern crate serde_derive;
-
-mod constants;
-mod game;
-mod state;
-mod types;
 
 use std::fs;
 use std::path::Path;
@@ -19,6 +12,8 @@ use bincode::serialize;
 use chrono::{Utc};
 use clap::{App, Arg};
 use rand::{FromEntropy, XorShiftRng};
+
+use lost_cities_simulation::game;
 
 fn get_filename() -> String {
 	let now = Utc::now();

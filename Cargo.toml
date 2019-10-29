@@ -2,6 +2,7 @@
 name = "lost_cities_simulation"
 version = "0.0.1"
 authors = ["Sasha Chedygov <sasha@chedygov.com>"]
+edition = "2018"
 
 [dependencies]
 bincode = "1.0.1"
